@@ -18,7 +18,7 @@ def generate_identifier(n=6):
 
 @app.route("/")
 def home():
-    return "Welcome to @beducode"
+    return "Welcome to @beducode2"
 
 
 @app.route("/generate/<path:address>/")
