@@ -6,10 +6,10 @@ from faunadb.objects import Ref
 from faunadb.client import FaunaClient
 
 app = Flask(__name__)
-client = FaunaClient(secret="fnAD_0DxnVACDd0buI9WNzU2CraeXMuQWcNsYJ_b")
+client = FaunaClient(secret="fnAEAcAKliACCJH00BfVSH2dPZ0EIMPWHlMCTbEX")
 
 
-def generate_identifier(n=6):
+def generate_id(n=8):
     identifier = ""
     for i in range(n):
         identifier += random.choice(string.ascii_letters)
@@ -18,31 +18,32 @@ def generate_identifier(n=6):
 
 @app.route("/")
 def home():
-    return "Welcome to @beducode2"
+    return "Welcome to @beducode shortlink server dicebot"
 
 
 @app.route("/generate/<path:address>/")
-def generate(address):
-    identifier = generate_identifier()
+def generate(address, params):
+    id = generate_id()
     if not (address.startswith("http://") or address.startswith("https://")):
         address = "http://" + address
 
-    client.query(q.create(q.collection("urls"), {
+    client.query(q.create(q.collection("shortlink"), {
         "data": {
-            "id": identifier,
-            "url": address
+            "id": id,
+            "url": address,
+            "param": params
         }
     }))
 
-    shortened_url = request.host_url + identifier
-    return jsonify({"identifier": identifier, "shortened_url": shortened_url})
+    shortlink = request.host_url + id
+    return jsonify({"url_id": id, "url": shortlink, "param": params})
 
 
-@app.route("/<string:identifier>/")
-def fetch_original(identifier):
+@app.route("/<string:url_id>/")
+def fetch_original(url_id):
     try:
         url = client.query(
-            q.get(q.match(q.index("url_id"), identifier)))
+            q.get(q.match(q.index("url_by_id"), url_id)))
     except:
         abort(404)
     return redirect(url["data"]["url"])
