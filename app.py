@@ -10,10 +10,10 @@ client = FaunaClient(secret="fnAEAcAKliACCJH00BfVSH2dPZ0EIMPWHlMCTbEX")
 
 
 def generate_id(n=8):
-    identifier = ""
+    id = ""
     for i in range(n):
-        identifier += random.choice(string.ascii_letters)
-    return identifier
+        id += random.choice(string.ascii_letters)
+    return id
 
 
 @app.route("/")
@@ -26,19 +26,16 @@ def generate(address, params):
     id = generate_id()
     if not (address.startswith("http://") or address.startswith("https://")):
         address = "http://" + address
-    
-    params = "bduflag"
 
     client.query(q.create(q.collection("shortlink"), {
         "data": {
             "id": id,
-            "url": address,
-            "param": params
+            "url": address
         }
     }))
 
     shortlink = request.host_url + id
-    return jsonify({"url_id": id, "url": shortlink, "param": params})
+    return jsonify({"url_id": id, "url": shortlink})
 
 
 @app.route("/<string:url_id>/")
