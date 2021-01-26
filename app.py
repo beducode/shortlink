@@ -26,6 +26,8 @@ def generate(address, params):
     id = generate_id()
     if not (address.startswith("http://") or address.startswith("https://")):
         address = "http://" + address
+    
+    params = "bduflag"
 
     client.query(q.create(q.collection("shortlink"), {
         "data": {
