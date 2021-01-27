@@ -18,7 +18,7 @@ def generate_id(n=8):
 
 @app.route("/")
 def home():
-    return "Welcome to @beducode shortlink server dicebot"
+    return "Welcome to @beducode shortlink dicebot free edition"
 
 
 @app.route("/generate/<path:address>/")
