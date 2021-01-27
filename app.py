@@ -22,16 +22,19 @@ def home():
 
 
 @app.route("/generate/<path:address>/")
-def generate(address, params):
+def generate(address):
     id = generate_id()
     if not (address.startswith("http://") or address.startswith("https://")):
         address = "http://" + address
+        
+    shorturl = "https://semawur.com/st/?api=3c4a1e5bff36089e900d4784f7b124b2fc074466&url=" + address
 
     client.query(q.create(q.collection("shortlink"), {
         "data": {
             "id": id,
-            "url": address
+            "url": shorturl
         }
+        
     }))
 
     shortlink = request.host_url + id
